@@ -16,25 +16,40 @@ namespace ProjektDziennik.Pages
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserManager<User> _userManager;
 
-        public IndexModel(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public IndexModel(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<User> userManager)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _userManager = userManager;
         }
         public IList<Mark> Mark { get; set; } = default!;
         public IList<Mark> TeacherMark { get; set; } = default!;
         public async Task OnGetAsync()
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Mark = await _context.Marks
-            .Where(e => e.StudentId == userId)
-            .Include(s => s.Teacher)
-            .ToListAsync();
-            TeacherMark = await _context.Marks
-            .Where(e => e.TeacherId == userId)
-            .Include(s => s.Student)
-            .ToListAsync();
+            if (_httpContextAccessor.HttpContext.User.IsInRole("Admin"))
+            {
+                Mark = await _context.Marks
+                    .Include(s => s.Teacher)
+                    .ToListAsync();
+                TeacherMark = await _context.Marks
+                    .Include(s => s.Student)
+                    .ToListAsync();
+            }
+            else
+            {
+                var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Mark = await _context.Marks
+                .Where(e => e.StudentId == userId)
+                .Include(s => s.Teacher)
+                .ToListAsync();
+                TeacherMark = await _context.Marks
+                .Where(e => e.TeacherId == userId)
+                .Include(s => s.Student)
+                .ToListAsync();
+            }
+            
         }
     }
 }
