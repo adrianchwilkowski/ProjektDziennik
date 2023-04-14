@@ -1,0 +1,33 @@
+﻿Students:
+1) mail: student@gmail.com
+name: student
+password: Qazxsw%531
+2) mail: student2@gmail.com
+name: student2
+password: Qazxsw%531
+3) mail: student3@gmail.com
+name: student3
+password: Qazxsw%531
+4) mail: student4@gmail.com
+name: student4
+password: Qazxsw%531
+5) mail: student5@gmail.com
+name: student5
+password: Qazxsw%531
+6) mail: student6@gmail.com
+name: student6
+password: Qazxsw%531
+7) mail: student7@gmail.com
+name: student7
+password: Qazxsw%531
+
+Teachers:
+1) mail = teacher1@gmail.com
+name: teacher1
+password: Qazxsw%531
+2) mail = teacher2@gmail.com
+name: teacher2
+password: Qazxsw%531
+3) mail = teacher3@gmail.com
+name: teacher3
+password: Qazxsw%531
