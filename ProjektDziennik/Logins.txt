@@ -31,3 +31,8 @@ password: Qazxsw%531
 3) mail = teacher3@gmail.com
 name: teacher3
 password: Qazxsw%531
+
+Super Admin:
+mail: superadmin@gmail.com
+name: superadmin
+password: 123Pa$$word.
