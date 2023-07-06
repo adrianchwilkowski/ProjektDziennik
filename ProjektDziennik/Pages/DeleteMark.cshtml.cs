@@ -22,7 +22,7 @@ namespace ProjektDziennik.Pages
         [BindProperty]
         public Mark Mark { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             if (id == null || _context.Marks == null)
             {

@@ -7,11 +7,13 @@ namespace ProjektDziennik.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key, Column(Order = 0)]
-        public int Id { get; set; }
+        public string Id { get; set; }
         public int Value { get; set; }
-        public string? StudentId { get; set; }
         public User Student { get; set; }
-        public string? TeacherId { get; set; }
+        public string StudentId { get; set; }
         public User Teacher { get; set; }
+        public string TeacherId { get; set; }
+        public Subject Subject { get; set; }
+        public string SubjectId { get; set; }
     }
 }

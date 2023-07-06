@@ -23,39 +23,6 @@ namespace ProjektDziennik.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("Role", "Identity");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -164,14 +131,16 @@ namespace ProjektDziennik.Migrations
 
             modelBuilder.Entity("ProjektDziennik.Models.Mark", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnOrder(0);
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SubjectId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -186,9 +155,52 @@ namespace ProjektDziennik.Migrations
 
                     b.HasIndex("StudentId");
 
+                    b.HasIndex("SubjectId");
+
                     b.HasIndex("TeacherId");
 
                     b.ToTable("Marks", "Identity");
+                });
+
+            modelBuilder.Entity("ProjektDziennik.Models.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("Role", "Identity");
+                });
+
+            modelBuilder.Entity("ProjektDziennik.Models.Subject", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subjects", "Identity");
                 });
 
             modelBuilder.Entity("ProjektDziennik.Models.User", b =>
@@ -264,16 +276,9 @@ namespace ProjektDziennik.Migrations
                     b.ToTable("User", "Identity");
                 });
 
-            modelBuilder.Entity("ProjektDziennik.Models.Role", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
-
-                    b.HasDiscriminator().HasValue("Role");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("ProjektDziennik.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -300,7 +305,7 @@ namespace ProjektDziennik.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("ProjektDziennik.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -329,6 +334,12 @@ namespace ProjektDziennik.Migrations
                         .HasForeignKey("StudentId")
                         .IsRequired();
 
+                    b.HasOne("ProjektDziennik.Models.Subject", "Subject")
+                        .WithMany("Marks")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ProjektDziennik.Models.User", "Teacher")
                         .WithMany("TeacherMarks")
                         .HasForeignKey("TeacherId")
@@ -336,7 +347,14 @@ namespace ProjektDziennik.Migrations
 
                     b.Navigation("Student");
 
+                    b.Navigation("Subject");
+
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("ProjektDziennik.Models.Subject", b =>
+                {
+                    b.Navigation("Marks");
                 });
 
             modelBuilder.Entity("ProjektDziennik.Models.User", b =>

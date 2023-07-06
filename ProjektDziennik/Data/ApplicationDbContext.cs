@@ -7,11 +7,12 @@ using ProjektDziennik.Models;
 
 namespace ProjektDziennik.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User,Role,string>
     {
         public DbSet<Mark> Marks { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Subject> Subjects { get;set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -26,13 +27,17 @@ namespace ProjektDziennik.Data
                     .WithMany(t => t.TeacherMarks)
                     .HasForeignKey(m => m.TeacherId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            builder.Entity<Mark>()
+                .HasOne(m => m.Subject)
+                .WithMany(t => t.Marks)
+                .HasForeignKey(m => m.SubjectId);
 
             builder.HasDefaultSchema("Identity");
             builder.Entity<User>(entity =>
             {
                 entity.ToTable(name: "User");
             });
-            builder.Entity<IdentityRole>(entity =>
+            builder.Entity<Role>(entity =>
             {
                 entity.ToTable(name: "Role");
             });

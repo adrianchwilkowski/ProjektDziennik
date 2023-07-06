@@ -51,7 +51,7 @@ try
     var roleManager = services.GetRequiredService<RoleManager<Role>>();
     await SeedData.SeedRolesAsync(userManager, roleManager);
     await SeedData.SeedSuperAdminAsync(userManager, roleManager);
-    await SeedData.SeedAccounts(userManager, roleManager);
+    await SeedData.SeedAccounts(userManager, roleManager,context);
 }
 catch (Exception ex)
 {

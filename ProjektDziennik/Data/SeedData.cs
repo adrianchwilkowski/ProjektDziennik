@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +23,16 @@ namespace ProjektDziennik.Data
         }
         public static async Task SeedSuperAdminAsync(UserManager<User> userManager, RoleManager<Role> roleManager)
         {
+            List<string> roleList = new List<string>
+            {
+                Roles.Student.ToString(),
+                Roles.Teacher.ToString(),
+                Roles.Admin.ToString(),
+            };
             //Seed Default User
             var defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "superadmin",
                 Email = "superadmin@gmail.com",
                 FirstName = "Mukesh",
@@ -38,16 +46,27 @@ namespace ProjektDziennik.Data
                 if (user == null)
                 {
                     await userManager.CreateAsync(defaultUser, "123Pa$$word.");
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Student.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Teacher.ToString());
-                    await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
+                    await userManager.AddToRolesAsync(defaultUser, roleList);
+                    //await userManager.AddToRoleAsync(defaultUser, Roles.Teacher.ToString());
+                    //await userManager.AddToRoleAsync(defaultUser, Roles.Admin.ToString());
                 }
             }
         }
-        public static async Task SeedAccounts(UserManager<User> userManager, RoleManager<Role> roleManager)
+            public static async Task SeedAccounts(UserManager<User> userManager, RoleManager<Role> roleManager, ApplicationDbContext context)
         {
+            List<Subject> subjects = new List<Subject>
+            {
+                new Subject {Id = Guid.NewGuid().ToString(),Name="mathematics"},
+                new Subject {Id = Guid.NewGuid().ToString(),Name="physics"},
+                new Subject {Id = Guid.NewGuid().ToString(),Name="chemistry"},
+                new Subject {Id = Guid.NewGuid().ToString(),Name="geography"},
+                new Subject {Id = Guid.NewGuid().ToString(),Name="P.E."},
+                new Subject {Id = Guid.NewGuid().ToString(),Name="english"},
+            };
+            context.Subjects.AddRangeAsync(subjects);
             var teacher1 = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "Teacher1",
                 Email = "teacher1@gmail.com",
                 FirstName = "teacher1",
@@ -66,6 +85,7 @@ namespace ProjektDziennik.Data
             }
             var teacher2 = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "Teacher2",
                 Email = "teacher2@gmail.com",
                 FirstName = "teacher2",
@@ -84,6 +104,7 @@ namespace ProjektDziennik.Data
             }
             var teacher3 = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "Teacher3",
                 Email = "teacher3@gmail.com",
                 FirstName = "teacher3",
@@ -102,6 +123,7 @@ namespace ProjektDziennik.Data
             }
             var defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student",
                 Email = "student@gmail.com",
                 FirstName = "student",
@@ -113,17 +135,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value = 4,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[0].Id,
                     },
                     new Mark
                     {
                         Value= 5,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[2].Id,
                     },
                     new Mark
                     {
                         Value= 4,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[5].Id,
                     }
                 }
             };
@@ -138,6 +163,7 @@ namespace ProjektDziennik.Data
             }
             defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student2",
                 Email = "student2@gmail.com",
                 FirstName = "student2",
@@ -149,17 +175,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value= 3,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[2].Id,
                     },
                     new Mark
                     {
                         Value= 5,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[5].Id,
                     },
                     new Mark
                     {
                         Value= 4,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[1].Id,
                     }
                 }
             };
@@ -174,6 +203,7 @@ namespace ProjektDziennik.Data
             }
             defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student3",
                 Email = "student3@gmail.com",
                 FirstName = "student3",
@@ -185,17 +215,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value= 2,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[4].Id,
                     },
                     new Mark
                     {
                         Value= 3,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[5].Id,
                     },
                     new Mark
                     {
                         Value= 4,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[3].Id,
                     }
                 }
             };
@@ -210,6 +243,7 @@ namespace ProjektDziennik.Data
             }
             defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student4",
                 Email = "student4@gmail.com",
                 FirstName = "student4",
@@ -221,17 +255,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value= 1,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[0].Id,
                     },
                     new Mark
                     {
                         Value= 4,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[1].Id,
                     },
                     new Mark
                     {
                         Value= 5,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[2].Id,
                     }
                 }
             };
@@ -246,6 +283,7 @@ namespace ProjektDziennik.Data
             }
             defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student5",
                 Email = "student5@gmail.com",
                 FirstName = "student5",
@@ -257,17 +295,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value= 5,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[3].Id,
                     },
                     new Mark
                     {
                         Value= 5,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[1].Id,
                     },
                     new Mark
                     {
                         Value= 5,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[5].Id,
                     }
                 }
             };
@@ -282,6 +323,7 @@ namespace ProjektDziennik.Data
             }
             defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student6",
                 Email = "student6@gmail.com",
                 FirstName = "student6",
@@ -293,17 +335,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value= 3,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[4].Id,
                     },
                     new Mark
                     {
                         Value= 4,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[0].Id,
                     },
                     new Mark
                     {
                         Value= 3,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[5].Id,
                     }
                 }
             };
@@ -318,6 +363,7 @@ namespace ProjektDziennik.Data
             }
             defaultUser = new User
             {
+                Id = Guid.NewGuid().ToString(),
                 UserName = "student7",
                 Email = "student7@gmail.com",
                 FirstName = "student7",
@@ -329,17 +375,20 @@ namespace ProjektDziennik.Data
                     new Mark
                     {
                         Value= 1,
-                        Teacher = teacher1
+                        Teacher = teacher1,
+                        SubjectId=subjects[1].Id,
                     },
                     new Mark
                     {
                         Value= 2,
-                        Teacher = teacher2
+                        Teacher = teacher2,
+                        SubjectId=subjects[2].Id,
                     },
                     new Mark
                     {
                         Value= 2,
-                        Teacher = teacher3
+                        Teacher = teacher3,
+                        SubjectId=subjects[3].Id,
                     }
                 }
             };
