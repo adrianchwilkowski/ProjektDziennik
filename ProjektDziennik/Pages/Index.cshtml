@@ -10,81 +10,53 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Mark[0].Id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Mark[0].Value)
             </th>
             <th>
-                Teacher Name
+                @Html.DisplayFor(Model => Model.name)
             </th>
             <th>
-                Teacher Surname
+                @Html.DisplayFor(Model => Model.surname)
             </th>
-            <th></th>
+            @if(Model.Roles[0]=="Admin"){
+                <th>
+                    Teacher Name
+                </th>
+                <th>
+                    Teacher Surname
+                </th>
+            }
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Mark)
+        @for (int i=0;i<Model.Mark.Count();i++)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
+                    @Html.DisplayFor(model => model.Mark[i].Value)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Value)
+                    @Html.DisplayFor(model => model.UserInfo[i].FirstName)
                 </td>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Teacher.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Teacher.LastName)
-                </th>
                 <td>
-                    <a asp-page="./DeleteMark" asp-route-id="@item.Id">Delete</a>
+                    @Html.DisplayFor(model => model.UserInfo[i].LastName)
                 </td>
+                @if (Model.Roles[0] == "Admin")
+                {
+                    <td>
+                        @Html.DisplayFor(model => model.UserInfo2[i].FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.UserInfo2[i].LastName)
+                    </td>
+                }
+                @if (Model.Roles[0] == "Admin" || Model.Roles[0] == "Teacher")
+                {
+                    <td>
+                        <a asp-page="./DeleteMark" asp-route-id="@Model.Mark[i].Id">Delete</a>
+                    </td>
+                }
             </tr>
         }
         </tbody>
-</table>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TeacherMark[0].Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TeacherMark[0].Value)
-            </th>
-            <th>
-                Student Name
-            </th>
-            <th>
-                Student Surname
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.TeacherMark)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Value)
-                </td>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Student.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Student.LastName)
-                </th>
-                <td>
-                    <a asp-page="./DeleteMark" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
 </table>
